@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#bfe3fb" />
+  <meta name="description" content="Swim Life by Coach John Kamel — a premium swimming performance dashboard for the coach and his swimmers." />
+
+  <title>Swim Life · Coach John Kamel</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Loading splash -->
+  <div id="splash">
+    <div class="splash-logo">
+      <span class="splash-mark">🏊</span>
+      <div class="splash-text">SWIM LIFE<span>BY COACH JOHN KAMEL</span></div>
+    </div>
+    <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+  </div>
+
+  <!-- Dynamic pool: waves + diving block + 3 swimmers (jump → swim → climb → jump) -->
+  <div class="ocean" aria-hidden="true">
+    <div class="ocean-waves back">
+      <div class="wave wave-back"></div>
+      <div class="wave wave-mid"></div>
+    </div>
+
+    <div class="diveblock">
+      <div class="post"></div>
+      <div class="brace"></div>
+      <div class="board"></div>
+    </div>
+
+    <div class="ladder">
+      <div class="rail l"></div>
+      <div class="rail r"></div>
+      <div class="rung"></div>
+      <div class="rung"></div>
+      <div class="rung"></div>
+    </div>
+
+    <div class="diver d1">
+      <svg class="diver-fig" viewBox="0 0 40 64" xmlns="http://www.w3.org/2000/svg">
+        <path class="leg leg-a" d="M20 44 L17 63" fill="none" stroke="#efbd8c" stroke-width="4.5" stroke-linecap="round"/>
+        <path class="leg leg-b" d="M20 44 L23 63" fill="none" stroke="#efbd8c" stroke-width="4.5" stroke-linecap="round"/>
+        <g class="body">
+          <rect x="15" y="26" width="10" height="18" rx="5" fill="#0e8fa3"/>
+          <circle cx="20" cy="20" r="7" fill="#efbd8c"/>
+          <path d="M13.2 19.5 A7 7 0 0 1 26.8 19.5 Q20 15 13.2 19.5 Z" fill="#ff6f61"/>
+        </g>
+        <path class="arm arm-a" d="M20 26 Q17 14 20 5" fill="none" stroke="#efbd8c" stroke-width="4.5" stroke-linecap="round"/>
+        <path class="arm arm-b" d="M20 26 Q23 14 20 5" fill="none" stroke="#e0a878" stroke-width="4.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="diver d2">
+      <svg class="diver-fig" viewBox="0 0 40 64" xmlns="http://www.w3.org/2000/svg">
+        <path class="leg leg-a" d="M20 44 L17 63" fill="none" stroke="#d29b6e" stroke-width="4.5" stroke-linecap="round"/>
+        <path class="leg leg-b" d="M20 44 L23 63" fill="none" stroke="#d29b6e" stroke-width="4.5" stroke-linecap="round"/>
+        <g class="body">
+          <rect x="15" y="26" width="10" height="18" rx="5" fill="#0fbccf"/>
+          <circle cx="20" cy="20" r="7" fill="#d29b6e"/>
+          <path d="M13.2 19.5 A7 7 0 0 1 26.8 19.5 Q20 15 13.2 19.5 Z" fill="#ffb703"/>
+        </g>
+        <path class="arm arm-a" d="M20 26 Q17 14 20 5" fill="none" stroke="#d29b6e" stroke-width="4.5" stroke-linecap="round"/>
+        <path class="arm arm-b" d="M20 26 Q23 14 20 5" fill="none" stroke="#b97c4f" stroke-width="4.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="diver d3">
+      <svg class="diver-fig" viewBox="0 0 40 64" xmlns="http://www.w3.org/2000/svg">
+        <path class="leg leg-a" d="M20 44 L17 63" fill="none" stroke="#f6cfa5" stroke-width="4.5" stroke-linecap="round"/>
+        <path class="leg leg-b" d="M20 44 L23 63" fill="none" stroke="#f6cfa5" stroke-width="4.5" stroke-linecap="round"/>
+        <g class="body">
+          <rect x="15" y="26" width="10" height="18" rx="5" fill="#ff6f61"/>
+          <circle cx="20" cy="20" r="7" fill="#f6cfa5"/>
+          <path d="M13.2 19.5 A7 7 0 0 1 26.8 19.5 Q20 15 13.2 19.5 Z" fill="#2ec4b6"/>
+        </g>
+        <path class="arm arm-a" d="M20 26 Q17 14 20 5" fill="none" stroke="#f6cfa5" stroke-width="4.5" stroke-linecap="round"/>
+        <path class="arm arm-b" d="M20 26 Q23 14 20 5" fill="none" stroke="#efbd8c" stroke-width="4.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="ocean-waves front">
+      <div class="wave wave-front"></div>
+    </div>
+  </div>
+
+  <!-- App mount point -->
+  <main id="app"></main>
+
+  <!-- Scripts (load order matters: data → db → store → ui → auth → views → app) -->
+  <script src="./data.js"></script>
+  <script src="./db.js"></script>
+  <script src="./store.js"></script>
+  <script src="./ui.js"></script>
+  <script src="./auth.js"></script>
+  <script src="./trainee.js"></script>
+  <script src="./trainer.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

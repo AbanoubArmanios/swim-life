@@ -1,0 +1,31 @@
+{
+  "name": "Swim Life by Coach John Kamel",
+  "short_name": "Swim Life",
+  "description": "Premium swimming performance dashboard for Coach John Kamel and his swimmers.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#bfe3fb",
+  "theme_color": "#bfe3fb",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
