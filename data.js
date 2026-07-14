@@ -224,5 +224,5 @@ function buildSeedState() {
     activity: [{ text: "Joined Coach John's gym", date: new Date().toISOString() }],
   }));
 
-  return { trainerPin: TRAINER_PIN, players, updatedAt: Date.now() };
+  return { schema: 2, trainerPin: TRAINER_PIN, players, updatedAt: Date.now() };
 }

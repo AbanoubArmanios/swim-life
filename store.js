@@ -10,12 +10,71 @@ const Store = (() => {
   let state = null;                 // the live application state
   const listeners = new Set();      // subscribers notified on change
 
-  /** Load state from the DB, seeding it on first run. */
+  /**
+   * Load state from the DB, seeding it on first run.
+   *
+   * MIGRATION: earlier versions of this app (the swim build) stored
+   * `speed` / `stamina` and text-based workouts. Loading that old state into the
+   * gym build produced NaN scores, so any pre-schema-2 state is migrated here:
+   *   speed    -> strength
+   *   stamina  -> endurance
+   *   mobility -> defaulted
+   *   workouts -> converted to the table row structure
+   */
   async function init() {
     const existing = await DB.get();
-    state = existing || buildSeedState();
-    if (!existing) await DB.set(state);
+    state = existing ? migrate(existing) : buildSeedState();
+    await DB.set(state);
     return state;
+  }
+
+  const SCHEMA = 2;
+
+  function migrate(s) {
+    if (s.schema === SCHEMA) return s;
+
+    (s.players || []).forEach((p) => {
+      // Stats: carry the old values across, fill in the new one.
+      if (p.strength == null) p.strength = Number(p.speed) || 50;
+      if (p.endurance == null) p.endurance = Number(p.stamina) || 50;
+      if (p.mobility == null) p.mobility = 60;
+      delete p.speed;
+      delete p.stamina;
+
+      // Workouts: convert old {exercises:[...]} shape into table rows.
+      p.workouts = (p.workouts || []).map((w) => {
+        if (Array.isArray(w.rows)) return w;
+        const rows = (w.exercises || []).map((ex) => ({
+          id: "rw_" + Math.random().toString(36).slice(2, 9),
+          sets: w.reps || "",
+          exercise: ex,
+          rest: "",
+          tools: "",
+          weight: "",
+        }));
+        return {
+          id: w.id,
+          title: w.title || "Workout",
+          date: w.date || new Date().toISOString().slice(0, 10),
+          rows,
+          completed: !!w.completed,
+          completedDate: w.completedDate || null,
+        };
+      });
+
+      // Old free-text daily plans are merged into workouts now.
+      delete p.dailyPlans;
+
+      // Guarantee the collections the gym build expects.
+      p.trainingPlans = p.trainingPlans || [];
+      p.monthlyReports = p.monthlyReports || [];
+      p.links = p.links || [];
+      p.attachments = p.attachments || [];
+      p.activity = p.activity || [];
+    });
+
+    s.schema = SCHEMA;
+    return s;
   }
 
   /** Subscribe to state changes. Returns an unsubscribe fn. */
@@ -37,16 +96,20 @@ const Store = (() => {
 
   /* ---------------------------- Derived getters --------------------------- */
 
+  /** Coerce a stat to a safe number (never NaN, always 0-100). */
+  function stat(v) {
+    const n = Number(v);
+    return Number.isFinite(n) ? Math.max(0, Math.min(100, n)) : 0;
+  }
+
   /** Overall score = (strength + endurance + mobility) / 3, rounded. */
   function overall(p) {
-    return Math.round(
-      (Number(p.strength) + Number(p.endurance) + Number(p.mobility)) / 3
-    );
+    return Math.round((stat(p.strength) + stat(p.endurance) + stat(p.mobility)) / 3);
   }
 
   /** Sum of the three stats — used as the ranking tie-breaker. */
   function statSum(p) {
-    return Number(p.strength) + Number(p.endurance) + Number(p.mobility);
+    return stat(p.strength) + stat(p.endurance) + stat(p.mobility);
   }
 
   /** Workout completion percentage for a player. */

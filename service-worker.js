@@ -6,7 +6,7 @@
  * to pick up the update.
  * ========================================================================== */
 
-const CACHE_VERSION = "fitlife-v2";
+const CACHE_VERSION = "fitlife-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
