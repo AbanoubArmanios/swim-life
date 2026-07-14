@@ -1,12 +1,12 @@
 /* =============================================================================
- * service-worker.js — Offline caching for the APEX Performance PWA
+ * service-worker.js — Offline caching for the Fitness Life PWA
  * -----------------------------------------------------------------------------
- * Uses a simple cache-first strategy for the app shell so the app loads
- * instantly and works fully offline once installed. Bump CACHE_VERSION when you
- * change any cached asset to force clients to update.
+ * Cache-first strategy for the app shell so the app loads instantly and works
+ * offline. Bump CACHE_VERSION when you change any cached asset to force clients
+ * to pick up the update.
  * ========================================================================== */
 
-const CACHE_VERSION = "apex-v1";
+const CACHE_VERSION = "fitlife-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -32,7 +32,7 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
-// Activate: clean up old caches.
+// Activate: clean up old caches (this also evicts the old swim-app cache).
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -52,7 +52,6 @@ self.addEventListener("fetch", (event) => {
       if (cached) return cached;
       return fetch(request)
         .then((response) => {
-          // Only cache same-origin successful responses.
           if (
             response &&
             response.status === 200 &&

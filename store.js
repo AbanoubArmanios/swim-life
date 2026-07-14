@@ -37,9 +37,16 @@ const Store = (() => {
 
   /* ---------------------------- Derived getters --------------------------- */
 
-  /** Overall score = (speed + stamina) / 2, rounded. */
+  /** Overall score = (strength + endurance + mobility) / 3, rounded. */
   function overall(p) {
-    return Math.round((Number(p.speed) + Number(p.stamina)) / 2);
+    return Math.round(
+      (Number(p.strength) + Number(p.endurance) + Number(p.mobility)) / 3
+    );
+  }
+
+  /** Sum of the three stats — used as the ranking tie-breaker. */
+  function statSum(p) {
+    return Number(p.strength) + Number(p.endurance) + Number(p.mobility);
   }
 
   /** Workout completion percentage for a player. */
@@ -57,7 +64,7 @@ const Store = (() => {
     const list = [...state.players].sort((a, b) => {
       const d = overall(b) - overall(a);
       if (d !== 0) return d;
-      return b.speed + b.stamina - (a.speed + a.stamina);
+      return statSum(b) - statSum(a);
     });
     list.forEach((p, i) => (p._rank = i + 1));
     return list;
@@ -119,14 +126,14 @@ const Store = (() => {
       age: Number(data.age) || 18,
       height: Number(data.height) || 175,
       weight: Number(data.weight) || 70,
-      speed: Number(data.speed) || 50,
-      stamina: Number(data.stamina) || 50,
+      strength: Number(data.strength) || 50,
+      endurance: Number(data.endurance) || 50,
+      mobility: Number(data.mobility) || 50,
       pin: data.pin || genPin(),
       photo: null,
       avatarSeed: state.players.length,
       coachNotes: "",
       trainingPlans: [],
-      dailyPlans: [],
       monthlyReports: [],
       workouts: [],
       links: [],
@@ -203,7 +210,7 @@ const Store = (() => {
   return {
     init, subscribe, save,
     get state() { return state; },
-    overall, completion, ranked, getPlayer, rankOf,
+    overall, statSum, completion, ranked, getPlayer, rankOf,
     updatePlayer, setPhoto, toggleWorkout, createPlayer, deletePlayer,
     addItem, updateItem, removeItem, resetDemo, genPin,
     verifyPlayerPin, verifyTrainerPin,

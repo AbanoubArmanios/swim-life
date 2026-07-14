@@ -1,159 +1,181 @@
 /* =============================================================================
- * data.js — Seed data for APEX Performance
+ * data.js — Seed data for FITNESS LIFE (by Coach John Kamel)
  * -----------------------------------------------------------------------------
- * Contains the initial demo roster of 10 trainees, the trainer PIN, and helper
- * utilities used to bootstrap the application the very first time it runs.
+ * Contains the initial demo roster of 10 members, the coach PIN, generated gym
+ * character avatars, and the table-structured workouts.
  *
- * IMPORTANT: This data is only used to seed the local database on first launch.
- * After that, the live state lives in IndexedDB (see db.js / store.js) so any
- * edits the trainer makes persist across reloads.
+ * A WORKOUT is a training day (e.g. "Pull 1") holding an ordered list of rows.
+ * Each row maps 1:1 to the coach's spreadsheet columns:
+ *     #  |  Sets & Reps  |  Exercise  |  Rest  |  Tools  |  Weight
+ * Any cell may be empty (warm-ups / stretches), and `tools` accepts free text
+ * including Arabic notes.
+ *
+ * This data only seeds the local database on first launch; after that the live
+ * state lives in IndexedDB (see db.js / store.js).
  * ========================================================================== */
 
-/**
- * The single trainer PIN. Change this to whatever you like.
- * (Also documented in README.md so it is easy to find.)
- */
+/** The single coach PIN. */
 const TRAINER_PIN = "700142";
 
-/**
- * A small palette used to generate colourful, deterministic avatar gradients
- * for trainees who have not uploaded a real photo yet.
- */
-/* Character-avatar palettes — varied so every swimmer looks distinct. */
+/* ---------------------- Gym character avatar palettes --------------------- */
 const SKIN_TONES = ["#f6cfa5", "#efbd8c", "#e0a878", "#d29b6e", "#b97c4f", "#9c6238", "#7d4b28"];
-const CAP_COLORS = ["#ff6f61", "#12b3c6", "#ffb703", "#7b61ff", "#2ec4b6", "#e84393", "#ff924c", "#0ea5e9", "#22c55e", "#f43f5e"];
-const BG_TINTS = ["#eafaf6", "#fef3ec", "#eef6ff", "#f6f0ff", "#eafcff", "#fdeef5"];
+const HAIR_COLORS = ["#2b2118", "#4a3527", "#1c1c1c", "#5c3b1e", "#31261d", "#0f0f0f"];
+const KIT_COLORS = ["#ff5c35", "#ffb020", "#6366f1", "#10b981", "#ef4444", "#0ea5e9", "#f43f5e", "#84cc16", "#8b5cf6", "#f97316"];
+const BG_TINTS = ["#fff1ec", "#fff6e6", "#eef0ff", "#e9f9f2", "#ffeeee", "#eaf6ff"];
 
 /**
- * Build a friendly cartoon SWIMMER character avatar (inline SVG data URI):
- * skin tone, swim cap, goggles and a smile — all varied by seed so each
- * athlete is visually unique. Used until a real photo is uploaded.
- * @param {string} name  Full name (used only for the aria/title).
- * @param {number} seed  Index driving the colour combination.
- * @returns {string} data:image/svg+xml URI.
+ * Build a friendly cartoon GYM MEMBER avatar (inline SVG data URI):
+ * headband, hair, tank top and a smile — varied by seed so each member is
+ * visually distinct. Used until a real photo is uploaded.
  */
 function generateAvatar(name, seed = 0) {
   const skin = SKIN_TONES[seed % SKIN_TONES.length];
-  const cap = CAP_COLORS[seed % CAP_COLORS.length];
-  const suit = CAP_COLORS[(seed + 4) % CAP_COLORS.length];
+  const hair = HAIR_COLORS[seed % HAIR_COLORS.length];
+  const kit = KIT_COLORS[seed % KIT_COLORS.length];
+  const band = KIT_COLORS[(seed + 5) % KIT_COLORS.length];
   const bg = BG_TINTS[seed % BG_TINTS.length];
-  const lens = "#cdeffd";
-  const strap = "#0c3a49";
 
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
       <defs>
         <linearGradient id="bg${seed}" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stop-color="${bg}"/>
-          <stop offset="1" stop-color="#dff3f8"/>
+          <stop offset="1" stop-color="#f2f3f6"/>
         </linearGradient>
       </defs>
       <rect width="200" height="200" fill="url(#bg${seed})"/>
-      <!-- shoulders / swimsuit -->
-      <path d="M46 200 Q100 146 154 200 Z" fill="${suit}"/>
-      <path d="M46 200 Q100 146 154 200" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="2"/>
+      <!-- shoulders / tank top -->
+      <path d="M40 200 Q100 142 160 200 Z" fill="${kit}"/>
+      <!-- tank straps -->
+      <path d="M78 158 L86 200" stroke="#ffffff" stroke-width="7" opacity="0.35" fill="none"/>
+      <path d="M122 158 L114 200" stroke="#ffffff" stroke-width="7" opacity="0.35" fill="none"/>
       <!-- neck -->
-      <rect x="87" y="118" width="26" height="30" rx="12" fill="${skin}"/>
+      <rect x="87" y="118" width="26" height="32" rx="12" fill="${skin}"/>
       <!-- head -->
       <circle cx="100" cy="94" r="43" fill="${skin}"/>
       <!-- ears -->
-      <circle cx="59" cy="96" r="8" fill="${skin}"/>
-      <circle cx="141" cy="96" r="8" fill="${skin}"/>
-      <!-- swim cap -->
-      <path d="M57 94 A43 43 0 0 1 143 94 Q143 70 100 62 Q57 70 57 94 Z" fill="${cap}"/>
-      <ellipse cx="84" cy="76" rx="15" ry="6" fill="#ffffff" opacity="0.35"/>
-      <!-- goggle strap -->
-      <path d="M58 96 Q100 104 142 96" stroke="${strap}" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <!-- goggles -->
-      <rect x="68" y="94" width="26" height="19" rx="9" fill="${lens}" stroke="${strap}" stroke-width="3"/>
-      <rect x="106" y="94" width="26" height="19" rx="9" fill="${lens}" stroke="${strap}" stroke-width="3"/>
-      <ellipse cx="75" cy="100" rx="4" ry="3" fill="#ffffff" opacity="0.8"/>
-      <ellipse cx="113" cy="100" rx="4" ry="3" fill="#ffffff" opacity="0.8"/>
+      <circle cx="59" cy="98" r="8" fill="${skin}"/>
+      <circle cx="141" cy="98" r="8" fill="${skin}"/>
+      <!-- hair -->
+      <path d="M57 88 A43 43 0 0 1 143 88 Q143 62 100 58 Q57 62 57 88 Z" fill="${hair}"/>
+      <!-- headband -->
+      <path d="M57 92 Q100 78 143 92 L143 80 Q100 66 57 80 Z" fill="${band}"/>
+      <rect x="57" y="80" width="86" height="13" rx="6" fill="${band}"/>
+      <!-- eyes -->
+      <circle cx="84" cy="102" r="4.2" fill="#2b2118"/>
+      <circle cx="116" cy="102" r="4.2" fill="#2b2118"/>
+      <!-- brows -->
+      <path d="M77 93 L91 95" stroke="#2b2118" stroke-width="3" stroke-linecap="round"/>
+      <path d="M109 95 L123 93" stroke="#2b2118" stroke-width="3" stroke-linecap="round"/>
       <!-- smile -->
-      <path d="M88 124 Q100 134 112 124" stroke="#8a4b2a" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M88 118 Q100 128 112 118" stroke="#8a4b2a" stroke-width="4" fill="none" stroke-linecap="round"/>
     </svg>`;
   return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg.trim());
 }
 
-/** ISO date string (YYYY-MM-DD) offset by `days` from today. */
+/* ------------------------------ Date helpers ------------------------------ */
 function isoOffset(days) {
   const d = new Date();
   d.setDate(d.getDate() + days);
   return d.toISOString().slice(0, 10);
 }
-
-/** Current month string (YYYY-MM). */
 function monthIso() {
   return new Date().toISOString().slice(0, 7);
 }
 
 /**
- * Create a fresh workout object.
+ * Create a workout row.
+ * Every field is free text so the coach can leave cells blank (warm-ups) or
+ * write notes (including Arabic) in `tools`.
  */
-function makeWorkout(title, description, exercises, duration, reps) {
+function row(sets, exercise, rest, tools, weight) {
   return {
-    id: "wk_" + Math.random().toString(36).slice(2, 9),
-    title,
-    description,
-    exercises,          // array of strings
-    duration,           // e.g. "45 min"
-    reps,               // e.g. "4 x 12"
-    completed: false,
-    completedDate: null,
-    date: new Date().toISOString().slice(0, 10),
+    id: "rw_" + Math.random().toString(36).slice(2, 9),
+    sets: sets || "",
+    exercise: exercise || "",
+    rest: rest || "",
+    tools: tools || "",
+    weight: weight || "",
   };
 }
 
-/**
- * The 10 demo trainees. Each has a unique 6-digit PIN (documented in README).
- * Speed and Stamina are 0-100. Overall is derived at runtime = (speed+stamina)/2.
- */
-const SEED_PLAYERS = [
-  {
-    name: "Ahmed Hassan", age: 24, height: 182, weight: 76,
-    speed: 92, stamina: 88, pin: "204815",
-  },
-  {
-    name: "Mohammed Nour", age: 21, height: 178, weight: 72,
-    speed: 88, stamina: 90, pin: "731960",
-  },
-  {
-    name: "Youssef Ibrahim", age: 23, height: 175, weight: 70,
-    speed: 85, stamina: 86, pin: "448209",
-  },
-  {
-    name: "Omar Khaled", age: 26, height: 185, weight: 80,
-    speed: 90, stamina: 79, pin: "615372",
-  },
-  {
-    name: "Abanoub Maged", age: 22, height: 180, weight: 74,
-    speed: 82, stamina: 84, pin: "890134",
-  },
-  {
-    name: "Karim Adel", age: 25, height: 183, weight: 78,
-    speed: 79, stamina: 88, pin: "372641",
-  },
-  {
-    name: "Mostafa Sayed", age: 20, height: 176, weight: 71,
-    speed: 87, stamina: 75, pin: "559028",
-  },
-  {
-    name: "Seif Ayman", age: 27, height: 188, weight: 84,
-    speed: 74, stamina: 82, pin: "186473",
-  },
-  {
-    name: "Ziad Fathy", age: 24, height: 179, weight: 73,
-    speed: 80, stamina: 77, pin: "640917",
-  },
-  {
-    name: "Marwan Tarek", age: 22, height: 181, weight: 75,
-    speed: 76, stamina: 80, pin: "923506",
-  },
-];
+/** Create a workout (a training day) holding table rows. */
+function makeWorkout(title, date, rows) {
+  return {
+    id: "wk_" + Math.random().toString(36).slice(2, 9),
+    title,                 // day name, shown in the highlighted banner row
+    date,                  // YYYY-MM-DD
+    rows,                  // ordered table rows
+    completed: false,
+    completedDate: null,
+  };
+}
+
+/** The coach's "Pull 1" day, exactly as supplied. */
+function pullDay(date) {
+  return makeWorkout("Pull 1", date, [
+    row("5 min", "Treadmill", "", "سرعة بطيئة مشي بس", ""),
+    row("", "Dynamic Stretch", "", "", ""),
+    row("3*12", "Lat pull down", "1:30", "Wide grip", "20k"),
+    row("3*10", "Seated row", "1:30", "Wide grip", ""),
+    row("3*10", "Reverse fly", "1:30", "Machine", "15k"),
+    row("3*12", "Seated dumbbell curls", "1min", "Dumbbell", "4k"),
+    row("3*12", "Barbell curl", "1min", "Cable", "15k"),
+    row("3*45 sec", "Reverse plank", "50sec", "", "body weight"),
+    row("20m", "Treadmill", "", "", ""),
+    row("", "Static Stretch", "", "", ""),
+  ]);
+}
+
+/** A push day. */
+function pushDay(date) {
+  return makeWorkout("Push 1", date, [
+    row("5 min", "Treadmill", "", "Warm-up pace", ""),
+    row("", "Dynamic Stretch", "", "", ""),
+    row("4*10", "Bench press", "1:30", "Barbell", "40k"),
+    row("3*12", "Incline dumbbell press", "1:30", "Dumbbell", "12k"),
+    row("3*12", "Shoulder press", "1:30", "Machine", "25k"),
+    row("3*15", "Lateral raise", "1min", "Dumbbell", "6k"),
+    row("3*12", "Triceps pushdown", "1min", "Cable", "20k"),
+    row("3*15", "Push ups", "45sec", "", "body weight"),
+    row("", "Static Stretch", "", "", ""),
+  ]);
+}
+
+/** A legs day. */
+function legsDay(date) {
+  return makeWorkout("Legs 1", date, [
+    row("5 min", "Bike", "", "Easy pace", ""),
+    row("", "Dynamic Stretch", "", "", ""),
+    row("4*10", "Back squat", "2min", "Barbell", "50k"),
+    row("3*12", "Leg press", "1:30", "Machine", "80k"),
+    row("3*12", "Romanian deadlift", "1:30", "Barbell", "35k"),
+    row("3*15", "Leg curl", "1min", "Machine", "25k"),
+    row("3*20", "Calf raise", "45sec", "Machine", "30k"),
+    row("3*45 sec", "Plank", "50sec", "", "body weight"),
+    row("", "Static Stretch", "", "", ""),
+  ]);
+}
 
 /**
- * Produce the full initial state object stored in the database on first run.
+ * The 10 demo members. Each has a unique 6-digit PIN (documented in README).
+ * Strength / Endurance / Mobility are 0-100.
+ * Overall is derived at runtime = (strength + endurance + mobility) / 3.
  */
+const SEED_PLAYERS = [
+  { name: "Ahmed Hassan",    age: 24, height: 182, weight: 76, strength: 92, endurance: 88, mobility: 74, pin: "204815" },
+  { name: "Mohammed Nour",   age: 21, height: 178, weight: 72, strength: 88, endurance: 90, mobility: 80, pin: "731960" },
+  { name: "Youssef Ibrahim", age: 23, height: 175, weight: 70, strength: 85, endurance: 86, mobility: 82, pin: "448209" },
+  { name: "Omar Khaled",     age: 26, height: 185, weight: 80, strength: 90, endurance: 79, mobility: 68, pin: "615372" },
+  { name: "Abanoub Maged",   age: 22, height: 180, weight: 74, strength: 82, endurance: 84, mobility: 78, pin: "890134" },
+  { name: "Karim Adel",      age: 25, height: 183, weight: 78, strength: 79, endurance: 88, mobility: 72, pin: "372641" },
+  { name: "Mostafa Sayed",   age: 20, height: 176, weight: 71, strength: 87, endurance: 75, mobility: 76, pin: "559028" },
+  { name: "Seif Ayman",      age: 27, height: 188, weight: 84, strength: 74, endurance: 82, mobility: 66, pin: "186473" },
+  { name: "Ziad Fathy",      age: 24, height: 179, weight: 73, strength: 80, endurance: 77, mobility: 84, pin: "640917" },
+  { name: "Marwan Tarek",    age: 22, height: 181, weight: 75, strength: 76, endurance: 80, mobility: 70, pin: "923506" },
+];
+
+/** Produce the full initial state stored in the database on first run. */
 function buildSeedState() {
   const players = SEED_PLAYERS.map((p, i) => ({
     id: "pl_" + (i + 1),
@@ -161,80 +183,31 @@ function buildSeedState() {
     age: p.age,
     height: p.height,
     weight: p.weight,
-    speed: p.speed,
-    stamina: p.stamina,
+    strength: p.strength,
+    endurance: p.endurance,
+    mobility: p.mobility,
     pin: p.pin,
-    photo: null,                    // base64 photo once uploaded, else null
-    avatarSeed: i,                  // for the generated placeholder
+    photo: null,
+    avatarSeed: i,
     coachNotes:
-      "Keep your streamline tight off every wall and breathe bilaterally on the freestyle sets. Focus on a high elbow catch and long, relaxed strokes. Hydrate well between sets. — Coach John",
+      "Keep your form strict on every rep — control the negative and don't rush the last set. Log the weights you actually lift so we can progress next week. — Coach John",
     trainingPlans: [
       {
         id: "tp_" + (i + 1),
-        title: "Base Endurance Block",
-        description:
-          "4-week aerobic foundation phase building freestyle endurance and stroke efficiency.",
+        title: "Strength Base Block",
+        description: "4-week foundation phase building strength and work capacity.",
         instructions:
-          "4 pool sessions per week. Log your average 100m pace after each main set and note stroke count per length.",
+          "4 gym sessions per week (Pull / Push / Legs / Conditioning). Add 2.5kg when you hit all reps with clean form.",
       },
     ],
-    workouts: [
-      makeWorkout(
-        "Sprint & Starts",
-        "Explosive short-distance work for top-end speed and reactive starts.",
-        ["400m easy warm-up", "8 x 25m sprint freestyle", "Dive start practice", "200m cooldown"],
-        "60 min",
-        "8 x 25m",
-      ),
-      makeWorkout(
-        "Aerobic Endurance Set",
-        "Steady long-distance freestyle to build stamina and pacing.",
-        ["300m warm-up", "10 x 100m freestyle on 1:45", "200m kick", "100m cooldown"],
-        "75 min",
-        "10 x 100m",
-      ),
-      makeWorkout(
-        "Technique & IM Drills",
-        "Stroke-refinement drills across all four strokes plus dryland core.",
-        ["Catch-up drill", "Fingertip drag", "Fist swim", "IM 4 x 50m", "Plank & core dryland"],
-        "55 min",
-        "4 x 50m IM",
-      ),
-    ],
-    // Day-by-day plan the coach sets — the athlete sees these in their dashboard.
-    dailyPlans: [
-      {
-        id: "dp_" + (i + 1) + "_1",
-        date: isoOffset(0),
-        title: "Freestyle Speed Session",
-        focus: "Speed",
-        content:
-          "Warm-up 400m easy. Main set: 8 x 50m sprint freestyle on 1:10 with fast turns. 200m cooldown. Keep your streamline tight off every wall.",
-      },
-      {
-        id: "dp_" + (i + 1) + "_2",
-        date: isoOffset(1),
-        title: "Endurance & Kick",
-        focus: "Stamina",
-        content:
-          "Warm-up 300m. Main set: 6 x 200m freestyle steady pace. 8 x 50m kick with board. 100m cooldown. Breathe bilaterally throughout.",
-      },
-      {
-        id: "dp_" + (i + 1) + "_3",
-        date: isoOffset(2),
-        title: "Technique & Recovery",
-        focus: "Technique",
-        content:
-          "Drills: catch-up, fingertip drag, single-arm freestyle. 4 x 100m IM easy. Finish with 10 min mobility and stretching.",
-      },
-    ],
-    // Monthly reports the coach posts (comment + optional photos + PDF).
+    // Workouts = training days, each rendered as the coach's table.
+    workouts: [pullDay(isoOffset(0)), pushDay(isoOffset(1)), legsDay(isoOffset(2))],
     monthlyReports: [
       {
         id: "mr_" + (i + 1),
         month: monthIso(),
         comment:
-          "Strong, consistent month. Your 100m freestyle pace improved and your turns are noticeably sharper. Next focus: bilateral breathing and core stability during long sets. — Coach John",
+          "Strong month. Your pulling strength is up and your form on the squat is much cleaner. Next focus: mobility work and keeping rest times honest. — Coach John",
         photos: [],
         pdf: null,
       },
@@ -242,15 +215,13 @@ function buildSeedState() {
     links: [
       {
         id: "ln_" + (i + 1),
-        title: "Freestyle Technique Breakdown",
+        title: "Deadlift Form Breakdown",
         url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         type: "youtube",
       },
     ],
-    attachments: [],                // {id,name,type,dataUrl}
-    activity: [
-      { text: "Joined Coach John's swim squad", date: new Date().toISOString() },
-    ],
+    attachments: [],
+    activity: [{ text: "Joined Coach John's gym", date: new Date().toISOString() }],
   }));
 
   return { trainerPin: TRAINER_PIN, players, updatedAt: Date.now() };

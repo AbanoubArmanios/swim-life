@@ -1,13 +1,13 @@
 {
-  "name": "Swim Life by Coach John Kamel",
-  "short_name": "Swim Life",
-  "description": "Premium swimming performance dashboard for Coach John Kamel and his swimmers.",
+  "name": "Fitness Life by Coach John Kamel",
+  "short_name": "Fitness Life",
+  "description": "Premium gym training dashboard for Coach John Kamel and his members.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#bfe3fb",
-  "theme_color": "#bfe3fb",
+  "background_color": "#f6f7f9",
+  "theme_color": "#1b2430",
   "icons": [
     {
       "src": "./icon-192.png",

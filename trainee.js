@@ -1,15 +1,18 @@
 /* =============================================================================
- * trainee.js — Trainee (athlete) dashboard — VIEW ONLY
+ * trainee.js — Member dashboard — VIEW ONLY
  * -----------------------------------------------------------------------------
- * The athlete can ONLY:
+ * The member can ONLY:
  *   - upload / change their profile photo
- *   - mark workouts complete
- * Everything else (age, height, weight, speed, stamina, rank, plans, notes,
- * links, attachments) is read-only. Those are controlled by the trainer.
+ *   - mark a workout day complete
+ * Everything else (age, height, weight, strength, endurance, mobility, rank,
+ * workouts, plans, notes, links, reports) is controlled by the coach.
+ *
+ * Tapping a workout day opens it as the coach's table:
+ *   #  |  Sets & Reps  |  Exercise  |  Rest  |  Tools  |  Weight
  * ========================================================================== */
 
 const TraineeView = (() => {
-  const { el, gauge, progressBar, toast, esc, photoOf, youtubeEmbed, modal } = UI;
+  const { el, gauge, progressBar, toast, esc, photoOf, youtubeEmbed, modal, workoutTable } = UI;
 
   function render(playerId, mount) {
     const p = Store.getPlayer(playerId);
@@ -24,11 +27,8 @@ const TraineeView = (() => {
     /* ------------------------------ Top bar ------------------------------ */
     root.append(
       el("div.dash-topbar", {}, [
-        el("button.btn.ghost", {
-          html: "&larr; Squad",
-          onClick: () => App.goHome(),
-        }),
-        el("div.badge.athlete", { text: "ATHLETE" }),
+        el("button.btn.ghost", { html: "&larr; Members", onClick: () => App.goHome() }),
+        el("div.badge.athlete", { text: "MEMBER" }),
       ])
     );
 
@@ -49,98 +49,72 @@ const TraineeView = (() => {
       }),
     ]);
 
-    const hero = el("div.hero.glass", {}, [
-      photoWrap,
-      el("div.hero-info", {}, [
-        el("div.hero-rank", { html: `#${rank} <span>RANK</span>` }),
-        el("h1.hero-name", { text: p.name }),
-        el("div.hero-meta", {}, [
-          metaPill("Age", p.age),
-          metaPill("Height", p.height + " cm"),
-          metaPill("Weight", p.weight + " kg"),
-        ]),
-        el("div.hero-overall", {}, [
-          el("div.hero-overall-num", { text: String(overall) }),
-          el("div.hero-overall-label", { text: "OVERALL" }),
-        ]),
-      ]),
-    ]);
-    root.append(hero);
-
-    /* ----------------------------- Gauges -------------------------------- */
     root.append(
-      el("div.gauge-row.glass", {}, [
-        el("div.gauge-cell", {}, [
-          gauge(p.speed, { label: "SPEED", color: "var(--neon)" }),
-        ]),
-        el("div.gauge-cell", {}, [
-          gauge(p.stamina, { label: "STAMINA", color: "var(--neon-2)" }),
-        ]),
-        el("div.gauge-cell", {}, [
-          gauge(overall, { label: "OVERALL", color: "var(--gold)" }),
+      el("div.hero.glass", {}, [
+        photoWrap,
+        el("div.hero-info", {}, [
+          // Rank (left) and Overall (right) share one flex row — they can no
+          // longer overlap the name or each other on narrow screens.
+          el("div.hero-toprow", {}, [
+            el("div.hero-rank", {}, [
+              el("span.hero-rank-num", { text: "#" + rank }),
+              el("span.hero-rank-lbl", { text: "RANK" }),
+            ]),
+            el("div.hero-overall", {}, [
+              el("div.hero-overall-num", { text: String(overall) }),
+              el("div.hero-overall-label", { text: "OVERALL" }),
+            ]),
+          ]),
+          el("h1.hero-name", { text: p.name }),
+          el("div.hero-meta", {}, [
+            metaPill("Age", p.age),
+            metaPill("Height", p.height + " cm"),
+            metaPill("Weight", p.weight + " kg"),
+          ]),
         ]),
       ])
     );
 
+    /* ----------------------------- Gauges -------------------------------- */
+    root.append(
+      el("div.gauge-row.glass", {}, [
+        el("div.gauge-cell", {}, [gauge(p.strength, { label: "STRENGTH", color: "var(--primary)" })]),
+        el("div.gauge-cell", {}, [gauge(p.endurance, { label: "ENDURANCE", color: "var(--amber)" })]),
+        el("div.gauge-cell", {}, [gauge(p.mobility, { label: "MOBILITY", color: "var(--indigo)" })]),
+      ])
+    );
+
     /* -------------------------- Progress panel --------------------------- */
-    const progressPanel = el("div.panel.glass", {}, [
-      el("div.panel-head", {}, [
-        el("h2", { text: "Training Progress" }),
-        el("div.pct-chip", { text: pct + "%" }),
-      ]),
-      progressBar(pct, { color: "var(--neon)" }),
-      el("div.panel-sub", {
-        text: `${p.workouts.filter((w) => w.completed).length} of ${
-          p.workouts.length
-        } workouts completed`,
-      }),
-    ]);
-    root.append(progressPanel);
-
-    /* --------------------------- Daily plan ------------------------------ */
-    if (p.dailyPlans && p.dailyPlans.length) {
-      const today = new Date().toISOString().slice(0, 10);
-      const sorted = [...p.dailyPlans].sort((a, b) => a.date.localeCompare(b.date));
-      const list = el("div.daily-list");
-      sorted.forEach((dp) => {
-        const isToday = dp.date === today;
-        list.append(
-          el("div.daily-card", { class: isToday ? "today" : "" }, [
-            el("div.daily-side", {}, [
-              el("div.daily-dow", { text: fmtDow(dp.date) }),
-              el("div.daily-dnum", { text: fmtDayNum(dp.date) }),
-              isToday ? el("div.today-chip", { text: "TODAY" }) : null,
-            ]),
-            el("div.daily-body", {}, [
-              el("div.daily-title-row", {}, [
-                el("span.daily-title", { text: dp.title }),
-                dp.focus ? el("span.tag.focus", { text: dp.focus }) : null,
-              ]),
-              el("div.daily-content", { text: dp.content }),
-            ]),
-          ])
-        );
-      });
-      root.append(
-        el("div.panel.glass", {}, [
-          el("div.panel-head", {}, [
-            el("h2", { text: "Daily Plan" }),
-            el("span.muted", { text: "Set by Coach John" }),
-          ]),
-          list,
-        ])
-      );
-    }
-
-    /* ---------------------------- Workouts ------------------------------- */
-    const workoutList = el("div.wk-list");
-    p.workouts.forEach((w) => workoutList.append(workoutCard(p, w, () => render(playerId, mount))));
     root.append(
       el("div.panel.glass", {}, [
-        el("div.panel-head", {}, [el("h2", { text: "Swim Sets" })]),
-        p.workouts.length
-          ? workoutList
-          : el("div.empty", { text: "No swim sets assigned yet." }),
+        el("div.panel-head", {}, [
+          el("h2", { text: "Training Progress" }),
+          el("div.pct-chip", { text: pct + "%" }),
+        ]),
+        progressBar(pct, { color: "var(--primary)" }),
+        el("div.panel-sub", {
+          text: `${p.workouts.filter((w) => w.completed).length} of ${p.workouts.length} workout days completed`,
+        }),
+      ])
+    );
+
+    /* ---------------------------- Workouts ------------------------------- */
+    const today = new Date().toISOString().slice(0, 10);
+    const workouts = [...(p.workouts || [])].sort((a, b) =>
+      String(a.date).localeCompare(String(b.date))
+    );
+    const wkList = el("div.wk-list");
+    workouts.forEach((w) =>
+      wkList.append(workoutCard(p, w, w.date === today, () => render(playerId, mount)))
+    );
+
+    root.append(
+      el("div.panel.glass", {}, [
+        el("div.panel-head", {}, [
+          el("h2", { text: "My Workouts" }),
+          el("span.muted", { text: "Tap a day to open it" }),
+        ]),
+        workouts.length ? wkList : el("div.empty", { text: "No workouts assigned yet." }),
       ])
     );
 
@@ -160,7 +134,7 @@ const TraineeView = (() => {
       );
       root.append(
         el("div.panel.glass", {}, [
-          el("div.panel-head", {}, [el("h2", { text: "Training Plans" })]),
+          el("div.panel-head", {}, [el("h2", { text: "Training Plan" })]),
           plans,
         ])
       );
@@ -178,9 +152,7 @@ const TraineeView = (() => {
 
     /* -------------------------- Monthly reports -------------------------- */
     if (p.monthlyReports && p.monthlyReports.length) {
-      const reports = [...p.monthlyReports].sort((a, b) =>
-        b.month.localeCompare(a.month)
-      );
+      const reports = [...p.monthlyReports].sort((a, b) => b.month.localeCompare(a.month));
       const wrap = el("div.report-list");
       reports.forEach((r) => {
         const card = el("div.report-card", {}, [
@@ -200,11 +172,7 @@ const TraineeView = (() => {
         }
         if (r.pdf) {
           card.append(
-            el("a.report-pdf", {
-              href: r.pdf.dataUrl,
-              download: r.pdf.name,
-              target: "_blank",
-            }, [
+            el("a.report-pdf", { href: r.pdf.dataUrl, download: r.pdf.name, target: "_blank" }, [
               el("span.report-pdf-ico", { text: "📄" }),
               el("span", { text: r.pdf.name }),
               el("span.report-pdf-dl", { text: "Download" }),
@@ -289,33 +257,57 @@ const TraineeView = (() => {
     ]);
   }
 
-  function workoutCard(player, w, refresh) {
-    const card = el("div.wk-card", { class: w.completed ? "done" : "" });
-    const box = el("button.wk-check", {
+  /** A workout day card. Tapping it opens the full table. */
+  function workoutCard(player, w, isToday, refresh) {
+    const exCount = (w.rows || []).filter((r) => r.exercise).length;
+
+    const check = el("button.wk-check", {
       class: w.completed ? "checked" : "",
       html: w.completed ? "✓" : "",
-      onClick: async () => {
+      title: w.completed ? "Mark as not done" : "Mark complete",
+      onClick: async (e) => {
+        e.stopPropagation();           // don't open the table
         await Store.toggleWorkout(player.id, w.id);
-        toast(w.completed ? "Workout reopened" : "Workout complete! 🔥",
+        toast(w.completed ? "Workout reopened" : "Workout complete! 💪",
           w.completed ? "info" : "success");
         refresh();
       },
     });
-    card.append(
-      box,
+
+    const card = el("div.wk-card", {
+      class: (w.completed ? "done " : "") + (isToday ? "today" : ""),
+      onClick: () => openWorkout(w),
+    }, [
+      check,
       el("div.wk-body", {}, [
-        el("div.wk-title", { text: w.title }),
-        el("div.wk-desc", { text: w.description }),
-        el("div.wk-tags", {}, [
-          w.duration ? el("span.tag", { text: "⏱ " + w.duration }) : null,
-          w.reps ? el("span.tag", { text: "🔁 " + w.reps }) : null,
-          w.exercises && w.exercises.length
-            ? el("span.tag", { text: "🏋 " + w.exercises.length + " drills" })
-            : null,
+        el("div.wk-title-row", {}, [
+          el("span.wk-title", { text: w.title }),
+          isToday ? el("span.today-chip", { text: "TODAY" }) : null,
         ]),
-      ])
-    );
+        el("div.wk-tags", {}, [
+          el("span.tag", { text: "📅 " + fmtDayNum(w.date) }),
+          el("span.tag", { text: "🏋 " + exCount + " exercises" }),
+        ]),
+      ]),
+      el("span.wk-open", { text: "View ›" }),
+    ]);
     return card;
+  }
+
+  /** Open a workout day as the full table, in a modal. */
+  function openWorkout(w) {
+    modal((close) =>
+      el("div.wt-modal", {}, [
+        el("div.editor-head", {}, [
+          el("div", {}, [
+            el("h2", { text: w.title }),
+            el("div.muted.wt-date", { text: fmtDayNum(w.date) }),
+          ]),
+          el("button.modal-close", { text: "✕", onClick: close }),
+        ]),
+        workoutTable(w),
+      ])
+    , { wide: true });
   }
 
   function linkCard(ln) {
@@ -323,12 +315,7 @@ const TraineeView = (() => {
     if (embed) {
       return el("div.yt-card", {}, [
         el("div.yt-frame", {}, [
-          el("iframe", {
-            src: embed,
-            frameborder: "0",
-            allowfullscreen: "true",
-            loading: "lazy",
-          }),
+          el("iframe", { src: embed, frameborder: "0", allowfullscreen: "true", loading: "lazy" }),
         ]),
         el("div.link-title", { text: ln.title }),
       ]);
@@ -340,50 +327,25 @@ const TraineeView = (() => {
     ]);
   }
 
+  /* ------------------------------ Formatters ----------------------------- */
   function fmtDate(iso) {
     try {
-      return new Date(iso).toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-      });
-    } catch {
-      return "";
-    }
+      return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    } catch { return ""; }
   }
-
-  /** Short day-of-week, e.g. "SAT". */
-  function fmtDow(iso) {
-    try {
-      return new Date(iso + "T00:00:00")
-        .toLocaleDateString(undefined, { weekday: "short" })
-        .toUpperCase();
-    } catch {
-      return "";
-    }
-  }
-
-  /** Day + short month, e.g. "11 Jul". */
   function fmtDayNum(iso) {
     try {
       return new Date(iso + "T00:00:00").toLocaleDateString(undefined, {
-        day: "numeric",
-        month: "short",
+        weekday: "short", day: "numeric", month: "short",
       });
-    } catch {
-      return iso;
-    }
+    } catch { return iso || ""; }
   }
-
-  /** Full month + year, e.g. "July 2026". */
   function fmtMonth(ym) {
     try {
       return new Date(ym + "-01T00:00:00").toLocaleDateString(undefined, {
-        month: "long",
-        year: "numeric",
+        month: "long", year: "numeric",
       });
-    } catch {
-      return ym;
-    }
+    } catch { return ym; }
   }
 
   return { render };

@@ -59,9 +59,9 @@ const App = (() => {
     root.append(
       el("header.brand", {}, [
         el("div.brand-left", {}, [
-          el("div.logo", {}, [el("span", { text: "🏊" })]),
+          el("div.logo", {}, [el("span", { text: "🏋" })]),
           el("div", {}, [
-            el("div.brand-name", { text: "SWIM LIFE" }),
+            el("div.brand-name", { text: "FITNESS LIFE" }),
             el("div.brand-tag", { text: "BY COACH JOHN KAMEL" }),
           ]),
         ]),
@@ -75,9 +75,9 @@ const App = (() => {
     /* Hero stat strip */
     root.append(
       el("section.stat-strip.glass", {}, [
-        stripStat("SQUAD", players.length, ""),
+        stripStat("MEMBERS", players.length, ""),
         stripStat("AVG OVERALL", avg, ""),
-        stripStat("TOP ATHLETE", top ? top.name.split(" ")[0] : "-", "", true),
+        stripStat("TOP MEMBER", top ? top.name.split(" ")[0] : "-", "", true),
       ])
     );
 
@@ -101,7 +101,7 @@ const App = (() => {
 
     root.append(
       el("footer.foot", {}, [
-        el("span", { text: "APEX Performance · Local PWA · No account needed" }),
+        el("span", { text: "Fitness Life · by Coach John Kamel" }),
       ])
     );
 
@@ -152,8 +152,10 @@ const App = (() => {
       style: `animation-delay:${index * 60}ms`,
       onClick: () => Auth.loginTrainee(p, () => openTrainee(p.id)),
     }, [
-      el("div.pc-rank", { text: "#" + p._rank }),
+      // Rank sits in the flow on the left (dark chip) so it can never
+      // collide with the Overall score on the right.
       el("div.pc-top", {}, [
+        el("div.pc-rank", { text: "#" + p._rank }),
         el("div.pc-photo-wrap", {}, [
           el("img.pc-photo", { src: photoOf(p), alt: p.name, loading: "lazy" }),
         ]),
@@ -167,8 +169,9 @@ const App = (() => {
         ]),
       ]),
       el("div.pc-stats", {}, [
-        miniStat("SPEED", p.speed, "var(--neon)"),
-        miniStat("STAMINA", p.stamina, "var(--neon-2)"),
+        miniStat("STRENGTH", p.strength, "var(--primary)"),
+        miniStat("ENDURANCE", p.endurance, "var(--amber)"),
+        miniStat("MOBILITY", p.mobility, "var(--indigo)"),
       ]),
       el("div.pc-foot", {}, [
         el("span.pc-lock", { html: "🔒 PIN required" }),

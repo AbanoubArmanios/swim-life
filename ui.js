@@ -219,6 +219,81 @@ const UI = (() => {
     });
   }
 
+  /* --------------------------- Workout table ------------------------------ */
+  /**
+   * Render a workout exactly in the coach's spreadsheet structure:
+   *
+   *   #  |  Sets & Reps  |  Exercise  |  Rest  |  Tools  |  Weight
+   *
+   * - A highlighted day-banner row spans the full width (e.g. "Pull 1").
+   * - Rows are auto-numbered; blank cells are allowed (warm-ups / stretches)
+   *   and render as a subtle dash.
+   * - The Tools cell accepts free text incl. Arabic (dir="auto" handles RTL).
+   * - On phones the table scrolls horizontally so no column gets crushed.
+   *
+   * @param {object} workout {title, rows:[{sets,exercise,rest,tools,weight}]}
+   */
+  function workoutTable(workout) {
+    const scroll = el("div.wt-scroll");
+    const table = el("table.wt");
+
+    // Column headers
+    const thead = el("thead", {}, [
+      el("tr", {}, [
+        el("th.wt-num", { text: "#" }),
+        el("th", { text: "Sets & Reps" }),
+        el("th.wt-ex", { text: "Exercise" }),
+        el("th", { text: "Rest" }),
+        el("th", { text: "Tools" }),
+        el("th", { text: "Weight" }),
+      ]),
+    ]);
+
+    const tbody = el("tbody");
+
+    // Highlighted day banner (e.g. "Pull 1")
+    tbody.append(
+      el("tr.wt-banner", {}, [
+        el("td", { colspan: "6", text: workout.title || "Workout" }),
+      ])
+    );
+
+    // Blank cell → subtle dash so the grid stays readable
+    const cell = (value, cls) => {
+      const td = el("td", { class: cls || "" });
+      const v = (value == null ? "" : String(value)).trim();
+      if (v) {
+        td.setAttribute("dir", "auto"); // supports Arabic / RTL notes
+        td.textContent = v;
+      } else {
+        td.append(el("span.wt-empty", { text: "–" }));
+      }
+      return td;
+    };
+
+    (workout.rows || []).forEach((r, i) => {
+      tbody.append(
+        el("tr", {}, [
+          el("td.wt-num", { text: String(i + 1) }),
+          cell(r.sets),
+          cell(r.exercise, "wt-ex"),
+          cell(r.rest),
+          cell(r.tools, "wt-tools"),
+          cell(r.weight),
+        ])
+      );
+    });
+
+    table.append(thead, tbody);
+    scroll.append(table);
+
+    const wrap = el("div.wt-wrap", {}, [
+      scroll,
+      el("div.wt-hint", { text: "Swipe the table sideways to see every column" }),
+    ]);
+    return wrap;
+  }
+
   /** Escape HTML for safe insertion. */
   function esc(s) {
     return String(s == null ? "" : s)
@@ -242,7 +317,7 @@ const UI = (() => {
   }
 
   return {
-    el, $, $$, toast, modal, countUp, gauge, progressBar,
+    el, $, $$, toast, modal, countUp, gauge, progressBar, workoutTable,
     pickImage, readFileAsDataURL, esc, photoOf, youtubeEmbed,
   };
 })();
