@@ -14,8 +14,8 @@
  * state lives in IndexedDB (see db.js / store.js).
  * ========================================================================== */
 
-/** The single coach PIN. */
-const TRAINER_PIN = "700142";
+/** The single coach PIN (4 digits). */
+const TRAINER_PIN = "7001";
 
 /* ---------------------- Gym character avatar palettes --------------------- */
 const SKIN_TONES = ["#f6cfa5", "#efbd8c", "#e0a878", "#d29b6e", "#b97c4f", "#9c6238", "#7d4b28"];
@@ -163,16 +163,16 @@ function legsDay(date) {
  * Overall is derived at runtime = (strength + endurance + mobility) / 3.
  */
 const SEED_PLAYERS = [
-  { name: "Ahmed Hassan",    age: 24, height: 182, weight: 76, strength: 92, endurance: 88, mobility: 74, pin: "204815" },
-  { name: "Mohammed Nour",   age: 21, height: 178, weight: 72, strength: 88, endurance: 90, mobility: 80, pin: "731960" },
-  { name: "Youssef Ibrahim", age: 23, height: 175, weight: 70, strength: 85, endurance: 86, mobility: 82, pin: "448209" },
-  { name: "Omar Khaled",     age: 26, height: 185, weight: 80, strength: 90, endurance: 79, mobility: 68, pin: "615372" },
-  { name: "Abanoub Maged",   age: 22, height: 180, weight: 74, strength: 82, endurance: 84, mobility: 78, pin: "890134" },
-  { name: "Karim Adel",      age: 25, height: 183, weight: 78, strength: 79, endurance: 88, mobility: 72, pin: "372641" },
-  { name: "Mostafa Sayed",   age: 20, height: 176, weight: 71, strength: 87, endurance: 75, mobility: 76, pin: "559028" },
-  { name: "Seif Ayman",      age: 27, height: 188, weight: 84, strength: 74, endurance: 82, mobility: 66, pin: "186473" },
-  { name: "Ziad Fathy",      age: 24, height: 179, weight: 73, strength: 80, endurance: 77, mobility: 84, pin: "640917" },
-  { name: "Marwan Tarek",    age: 22, height: 181, weight: 75, strength: 76, endurance: 80, mobility: 70, pin: "923506" },
+  { name: "Ahmed Hassan",    age: 24, height: 182, weight: 76, strength: 92, endurance: 88, mobility: 74, pin: "2048" },
+  { name: "Mohammed Nour",   age: 21, height: 178, weight: 72, strength: 88, endurance: 90, mobility: 80, pin: "7319" },
+  { name: "Youssef Ibrahim", age: 23, height: 175, weight: 70, strength: 85, endurance: 86, mobility: 82, pin: "4482" },
+  { name: "Omar Khaled",     age: 26, height: 185, weight: 80, strength: 90, endurance: 79, mobility: 68, pin: "6153" },
+  { name: "Abanoub Maged",   age: 22, height: 180, weight: 74, strength: 82, endurance: 84, mobility: 78, pin: "8901" },
+  { name: "Karim Adel",      age: 25, height: 183, weight: 78, strength: 79, endurance: 88, mobility: 72, pin: "3726" },
+  { name: "Mostafa Sayed",   age: 20, height: 176, weight: 71, strength: 87, endurance: 75, mobility: 76, pin: "5590" },
+  { name: "Seif Ayman",      age: 27, height: 188, weight: 84, strength: 74, endurance: 82, mobility: 66, pin: "1864" },
+  { name: "Ziad Fathy",      age: 24, height: 179, weight: 73, strength: 80, endurance: 77, mobility: 84, pin: "6409" },
+  { name: "Marwan Tarek",    age: 22, height: 181, weight: 75, strength: 76, endurance: 80, mobility: 70, pin: "9235" },
 ];
 
 /** Produce the full initial state stored in the database on first run. */

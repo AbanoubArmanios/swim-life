@@ -81,6 +81,15 @@ const App = (() => {
       ])
     );
 
+    /* Training pillars — Coach John's method */
+    root.append(
+      el("div.section-head", {}, [
+        el("h2", { text: "Training Pillars" }),
+        el("span.muted", { text: "Coach John's method" }),
+      ])
+    );
+    root.append(buildPillars());
+
     /* Leaderboard heading */
     root.append(
       el("div.section-head", {}, [
@@ -107,6 +116,29 @@ const App = (() => {
 
     mount.innerHTML = "";
     mount.append(root);
+  }
+
+  /* The six training pillars Coach John builds every program on. */
+  const PILLARS = [
+    { icon: "🧍", label: "Stability", color: "var(--indigo)" },
+    { icon: "🤸", label: "Mobility", color: "var(--amber)" },
+    { icon: "🫁", label: "Endurance", color: "var(--green)" },
+    { icon: "💪", label: "Strength", color: "var(--primary)" },
+    { icon: "🩹", label: "Corrective Exercise", color: "#0ea5e9" },
+    { icon: "🔥", label: "Strength & Conditioning", color: "#f43f5e" },
+  ];
+
+  function buildPillars() {
+    const grid = el("div.pillar-grid");
+    PILLARS.forEach((p, i) =>
+      grid.append(
+        el("div.pillar-card.glass", { style: `animation-delay:${i * 60}ms;--pc:${p.color}` }, [
+          el("div.pillar-ico", { text: p.icon }),
+          el("div.pillar-label", { text: p.label }),
+        ])
+      )
+    );
+    return grid;
   }
 
   function stripStat(label, value, suffix, highlight) {

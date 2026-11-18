@@ -13,13 +13,13 @@ so reloading the browser preserves everything.
 
 ## 🔑 Login PINs (test credentials)
 
-No usernames, no passwords — only 6-digit PINs.
+No usernames, no passwords — only 4-digit PINs.
 
 ### Coach
 
 | Role             | PIN      |
 | ---------------- | -------- |
-| Coach John Kamel | **700142** |
+| Coach John Kamel | **7001** |
 
 Use the **Trainer Login** button on the home screen for full control.
 
@@ -27,18 +27,18 @@ Use the **Trainer Login** button on the home screen for full control.
 
 Tap a member card on the home screen, then enter that member's PIN.
 
-| # | Member           | PIN      |
-| - | ---------------- | -------- |
-| 1 | Ahmed Hassan     | **204815** |
-| 2 | Mohammed Nour    | **731960** |
-| 3 | Youssef Ibrahim  | **448209** |
-| 4 | Omar Khaled      | **615372** |
-| 5 | Abanoub Maged    | **890134** |
-| 6 | Karim Adel       | **372641** |
-| 7 | Mostafa Sayed    | **559028** |
-| 8 | Seif Ayman       | **186473** |
-| 9 | Ziad Fathy       | **640917** |
-| 10 | Marwan Tarek    | **923506** |
+| # | Member           | PIN    |
+| - | ---------------- | ------ |
+| 1 | Ahmed Hassan     | **2048** |
+| 2 | Mohammed Nour    | **7319** |
+| 3 | Youssef Ibrahim  | **4482** |
+| 4 | Omar Khaled      | **6153** |
+| 5 | Abanoub Maged    | **8901** |
+| 6 | Karim Adel       | **3726** |
+| 7 | Mostafa Sayed    | **5590** |
+| 8 | Seif Ayman       | **1864** |
+| 9 | Ziad Fathy       | **6409** |
+| 10 | Marwan Tarek    | **9235** |
 
 > A member can **only** upload their photo and mark a workout day complete.
 > Everything else is read-only — the coach controls all stats and content.

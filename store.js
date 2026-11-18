@@ -28,10 +28,19 @@ const Store = (() => {
     return state;
   }
 
-  const SCHEMA = 2;
+  const SCHEMA = 3;
 
   function migrate(s) {
     if (s.schema === SCHEMA) return s;
+
+    // Codes are now 4 digits — shorten any older 6-digit code to its first 4
+    // (fresh seeds already use those same 4 digits, so everything stays in sync).
+    if (s.trainerPin && String(s.trainerPin).length > 4) {
+      s.trainerPin = String(s.trainerPin).slice(0, 4);
+    }
+    (s.players || []).forEach((p) => {
+      if (p.pin && String(p.pin).length > 4) p.pin = String(p.pin).slice(0, 4);
+    });
 
     (s.players || []).forEach((p) => {
       // Stats: carry the old values across, fill in the new one.
@@ -248,13 +257,13 @@ const Store = (() => {
     notify();
   }
 
-  /** Generate a unique 6-digit PIN not already used. */
+  /** Generate a unique 4-digit PIN not already used. */
   function genPin() {
     const used = new Set(state.players.map((p) => p.pin));
     used.add(state.trainerPin);
     let pin;
     do {
-      pin = String(Math.floor(100000 + Math.random() * 900000));
+      pin = String(Math.floor(1000 + Math.random() * 9000));
     } while (used.has(pin));
     return pin;
   }

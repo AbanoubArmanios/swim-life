@@ -15,13 +15,14 @@ const Auth = (() => {
    */
   function pinPad({ title, subtitle, accent, verify, onSuccess }) {
     modal((close) => {
+      const PIN_LEN = 4; // codes are 4 digits
       let pin = "";
       const dots = el("div.pin-dots");
       const errorEl = el("div.pin-error", { text: "" });
 
       function renderDots() {
         dots.innerHTML = "";
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < PIN_LEN; i++) {
           const d = el("div.pin-dot");
           if (i < pin.length) d.classList.add("filled");
           dots.append(d);
@@ -54,11 +55,11 @@ const Auth = (() => {
       }
 
       function press(n) {
-        if (pin.length >= 6) return;
+        if (pin.length >= PIN_LEN) return;
         pin += n;
         errorEl.textContent = "";
         renderDots();
-        if (pin.length === 6) setTimeout(submit, 180);
+        if (pin.length === PIN_LEN) setTimeout(submit, 180);
       }
 
       function backspace() {
@@ -70,7 +71,7 @@ const Auth = (() => {
       const keyHandler = (e) => {
         if (e.key >= "0" && e.key <= "9") press(e.key);
         else if (e.key === "Backspace") backspace();
-        else if (e.key === "Enter" && pin.length === 6) submit();
+        else if (e.key === "Enter" && pin.length === PIN_LEN) submit();
       };
       document.addEventListener("keydown", keyHandler);
 
@@ -119,7 +120,7 @@ const Auth = (() => {
   function loginTrainee(player, onSuccess) {
     pinPad({
       title: player.name,
-      subtitle: "Enter your 6-digit PIN",
+      subtitle: "Enter your 4-digit PIN",
       accent: "var(--neon)",
       verify: (pin) => Store.verifyPlayerPin(player.id, pin),
       onSuccess: () => {

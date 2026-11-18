@@ -107,7 +107,7 @@ const TrainerView = (() => {
 
       const body = el("div.form-grid", {}, [
         field("Name", "name", "text", p ? p.name : ""),
-        field("6-digit PIN", "pin", "text", p ? p.pin : Store.genPin()),
+        field("4-digit PIN", "pin", "text", p ? p.pin : Store.genPin()),
         field("Age", "age", "number", p ? p.age : 18),
         field("Height (cm)", "height", "number", p ? p.height : 175),
         field("Weight (kg)", "weight", "number", p ? p.weight : 70),
@@ -135,7 +135,7 @@ const TrainerView = (() => {
               const clamp = (v) => Math.max(0, Math.min(100, Number(v) || 0));
               const data = {
                 name: f.name.value.trim() || "Unnamed",
-                pin: (f.pin.value.trim() || Store.genPin()).slice(0, 6),
+                pin: (f.pin.value.trim() || Store.genPin()).slice(0, 4),
                 age: Number(f.age.value) || 0,
                 height: Number(f.height.value) || 0,
                 weight: Number(f.weight.value) || 0,

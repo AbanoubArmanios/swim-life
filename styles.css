@@ -218,6 +218,36 @@ body {
 .strip-val.hl { color: var(--primary); font-size: 24px; }
 .strip-label { font-size: 10px; letter-spacing: 3px; color: var(--muted); margin-top: 6px; }
 
+/* Training pillars */
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 26px;
+}
+@media (min-width: 560px) { .pillar-grid { grid-template-columns: repeat(3, 1fr); } }
+.pillar-card {
+  --pc: var(--primary);
+  position: relative;
+  padding: 18px 14px;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  overflow: hidden;
+  animation: cardin 0.5s ease both;
+  transition: transform 0.2s ease, box-shadow 0.3s;
+  border-top: 3px solid var(--pc);
+}
+.pillar-card:hover { transform: translateY(-4px); box-shadow: 0 22px 44px -26px var(--pc); }
+.pillar-ico {
+  width: 52px; height: 52px; border-radius: 16px;
+  display: grid; place-items: center; font-size: 26px;
+  background: color-mix(in srgb, var(--pc) 16%, #ffffff);
+}
+.pillar-label {
+  font-family: var(--ff-display); font-weight: 700; font-size: 14px;
+  letter-spacing: 0.5px; color: var(--dark); line-height: 1.15;
+}
+
 .section-head { display: flex; align-items: baseline; justify-content: space-between; margin: 8px 4px 16px; }
 .section-head h2 { font-family: var(--ff-display); font-size: 22px; letter-spacing: 1px; color: var(--dark); }
 .section-head .muted { font-size: 12px; }
