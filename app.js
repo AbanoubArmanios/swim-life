@@ -190,34 +190,27 @@ const App = (() => {
     const overall = Store.overall(p);
     const pct = Store.completion(p);
 
-    const card = el("button.player-card.glass", {
-      style: `animation-delay:${index * 60}ms`,
+    // Photo-forward athlete card: big real photo on top, data below.
+    const card = el("button.player-card", {
+      style: `animation-delay:${index * 55}ms`,
       onClick: () => Auth.loginTrainee(p, () => openTrainee(p.id)),
     }, [
-      // Rank sits in the flow on the left (dark chip) so it can never
-      // collide with the Overall score on the right.
-      el("div.pc-top", {}, [
+      el("div.pc-img", {}, [
+        el("img", { src: photoOf(p), alt: p.name, loading: "lazy" }),
         el("div.pc-rank", { text: "#" + p._rank }),
-        el("div.pc-photo-wrap", {}, [
-          el("img.pc-photo", { src: photoOf(p), alt: p.name, loading: "lazy" }),
-        ]),
-        el("div.pc-identity", {}, [
-          el("div.pc-name", { text: p.name }),
-          el("div.pc-age", { text: `Age ${p.age} · ${p.height}cm · ${p.weight}kg` }),
-        ]),
         el("div.pc-overall", {}, [
           el("div.pc-overall-num", { text: String(overall) }),
-          el("div.pc-overall-lbl", { text: "OVR" }),
+          el("div.pc-overall-lbl", { text: "OVERALL" }),
         ]),
       ]),
-      el("div.pc-stats", {}, [
-        miniStat("STRENGTH", p.strength, "var(--primary)"),
-        miniStat("ENDURANCE", p.endurance, "var(--amber)"),
-        miniStat("MOBILITY", p.mobility, "var(--indigo)"),
-      ]),
-      el("div.pc-foot", {}, [
-        el("span.pc-lock", { html: "🔒 PIN required" }),
-        el("span.pc-prog", { text: pct + "% trained" }),
+      el("div.pc-body", {}, [
+        el("div.pc-name", { text: p.name }),
+        el("div.pc-age", { text: `Age ${p.age} · ${p.height}cm · ${p.weight}kg` }),
+        el("div.pc-stats", {}, [
+          miniStat("STR", p.strength, "var(--primary)"),
+          miniStat("END", p.endurance, "var(--amber)"),
+          miniStat("MOB", p.mobility, "var(--indigo)"),
+        ]),
       ]),
     ]);
     return card;

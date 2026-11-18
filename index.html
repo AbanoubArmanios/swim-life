@@ -3,27 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#1b2430" />
-  <meta name="description" content="Fitness Life by Coach John Kamel — a premium gym training dashboard for the coach and his members." />
+  <meta name="theme-color" content="#0c0f14" />
+  <meta name="description" content="Fitness Life by Coach John Kamel — a premium gym training app for the coach and his members." />
 
   <title>Fitness Life · Coach John Kamel</title>
 
-  <!-- PWA -->
   <link rel="manifest" href="./manifest.json" />
   <link rel="apple-touch-icon" href="./icon-192.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- ?v= cache-busts old cached assets from the previous build -->
-  <link rel="stylesheet" href="./styles.css?v=5" />
+  <link rel="stylesheet" href="./styles.css?v=6" />
 </head>
 <body>
-  <!-- Loading splash -->
   <div id="splash">
     <div class="splash-logo">
       <span class="splash-mark">🏋</span>
@@ -32,83 +28,15 @@
     <div class="splash-bar"><div class="splash-bar-fill"></div></div>
   </div>
 
-  <!-- Animated gym floor: running, push-ups, pull-ups and lifting (decorative) -->
-  <div class="gymfloor" aria-hidden="true">
-
-    <!-- RUNNER -->
-    <svg class="athlete a-runner" viewBox="0 0 60 92" xmlns="http://www.w3.org/2000/svg">
-      <g class="run-bob">
-        <path class="rn-leg rn-leg-a" d="M30 56 L38 82" stroke="#4a3527" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path class="rn-leg rn-leg-b" d="M30 56 L21 82" stroke="#3a2a1e" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path class="rn-arm rn-arm-a" d="M39 32 L50 46" stroke="#efbd8c" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <path d="M40 24 L30 57" stroke="#ff5c35" stroke-width="12" stroke-linecap="round" fill="none"/>
-        <circle cx="43" cy="15" r="9" fill="#efbd8c"/>
-        <path d="M34.5 12 A9 9 0 0 1 51 12 Z" fill="#2b2118"/>
-        <path class="rn-arm rn-arm-b" d="M39 32 L28 46" stroke="#e0a878" stroke-width="6" stroke-linecap="round" fill="none"/>
-      </g>
-    </svg>
-
-    <!-- PUSH-UPS -->
-    <svg class="athlete a-pushup" viewBox="0 0 96 54" xmlns="http://www.w3.org/2000/svg">
-      <g class="pu-body">
-        <path d="M22 30 L66 26" stroke="#6366f1" stroke-width="12" stroke-linecap="round" fill="none"/>
-        <path d="M22 30 L10 44" stroke="#3a2a1e" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M64 28 L68 46" stroke="#efbd8c" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <path d="M34 30 L32 46" stroke="#e0a878" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <circle cx="76" cy="24" r="9" fill="#efbd8c"/>
-        <path d="M67.5 21 A9 9 0 0 1 84 21 Z" fill="#4a3527"/>
-      </g>
-      <rect x="4" y="46" width="88" height="4" rx="2" fill="#cfd5dd"/>
-    </svg>
-
-    <!-- PULL-UPS -->
-    <svg class="athlete a-pullup" viewBox="0 0 70 104" xmlns="http://www.w3.org/2000/svg">
-      <rect x="2" y="6" width="66" height="6" rx="3" fill="#8b96a5"/>
-      <g class="pl-lift">
-        <g class="pl-arms">
-          <path d="M26 12 L28 34" stroke="#efbd8c" stroke-width="6" stroke-linecap="round" fill="none"/>
-          <path d="M44 12 L42 34" stroke="#e0a878" stroke-width="6" stroke-linecap="round" fill="none"/>
-        </g>
-        <circle cx="35" cy="42" r="9" fill="#efbd8c"/>
-        <path d="M26.5 39 A9 9 0 0 1 43 39 Z" fill="#2b2118"/>
-        <path d="M35 50 L35 74" stroke="#10b981" stroke-width="13" stroke-linecap="round" fill="none"/>
-        <path d="M35 74 L29 96" stroke="#3a2a1e" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M35 74 L42 94" stroke="#4a3527" stroke-width="7" stroke-linecap="round" fill="none"/>
-      </g>
-    </svg>
-
-    <!-- OVERHEAD PRESS -->
-    <svg class="athlete a-lift" viewBox="0 0 84 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M42 46 L34 84" stroke="#3a2a1e" stroke-width="7" stroke-linecap="round" fill="none"/>
-      <path d="M42 46 L51 84" stroke="#4a3527" stroke-width="7" stroke-linecap="round" fill="none"/>
-      <path d="M42 26 L42 50" stroke="#ffb020" stroke-width="13" stroke-linecap="round" fill="none"/>
-      <circle cx="42" cy="20" r="9" fill="#d29b6e"/>
-      <path d="M33.5 17 A9 9 0 0 1 50 17 Z" fill="#2b2118"/>
-      <g class="lf-press">
-        <path d="M34 28 L28 14" stroke="#d29b6e" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <path d="M50 28 L56 14" stroke="#b97c4f" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <rect x="10" y="9" width="64" height="5" rx="2.5" fill="#5f6b7a"/>
-        <rect x="12" y="3" width="8" height="17" rx="3" fill="#1b2430"/>
-        <rect x="64" y="3" width="8" height="17" rx="3" fill="#1b2430"/>
-      </g>
-      <rect x="6" y="86" width="72" height="4" rx="2" fill="#cfd5dd"/>
-    </svg>
-
-    <!-- floor -->
-    <div class="floor"></div>
-  </div>
-
-  <!-- App mount point -->
   <main id="app"></main>
 
-  <!-- Scripts (load order matters: data → db → store → ui → auth → views → app) -->
-  <script src="./data.js?v=5"></script>
-  <script src="./db.js?v=5"></script>
-  <script src="./store.js?v=5"></script>
-  <script src="./ui.js?v=5"></script>
-  <script src="./auth.js?v=5"></script>
-  <script src="./trainee.js?v=5"></script>
-  <script src="./trainer.js?v=5"></script>
-  <script src="./app.js?v=5"></script>
+  <script src="./data.js?v=6"></script>
+  <script src="./db.js?v=6"></script>
+  <script src="./store.js?v=6"></script>
+  <script src="./ui.js?v=6"></script>
+  <script src="./auth.js?v=6"></script>
+  <script src="./trainee.js?v=6"></script>
+  <script src="./trainer.js?v=6"></script>
+  <script src="./app.js?v=6"></script>
 </body>
 </html>
