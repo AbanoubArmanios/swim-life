@@ -20,8 +20,8 @@ const TRAINER_PIN = "7001";
 /* Real photo avatars (realistic gym portraits), one per member by seed.
    A member's uploaded photo still overrides these (see photoOf in ui.js). */
 const DEFAULT_AVATARS = [
-  "./avatar0.jpg", "./avatar1.jpg", "./avatar2.jpg", "./avatar3.jpg", "./avatar4.jpg",
-  "./avatar5.jpg", "./avatar6.jpg", "./avatar7.jpg", "./avatar8.jpg", "./avatar9.jpg",
+  "./avatar0.jpg?v=6", "./avatar1.jpg?v=6", "./avatar2.jpg?v=6", "./avatar3.jpg?v=6", "./avatar4.jpg?v=6",
+  "./avatar5.jpg?v=6", "./avatar6.jpg?v=6", "./avatar7.jpg?v=6", "./avatar8.jpg?v=6", "./avatar9.jpg?v=6",
 ];
 
 /* ---------------------- Gym character avatar palettes (fallback) ---------- */
