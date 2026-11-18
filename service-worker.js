@@ -6,35 +6,35 @@
  * to pick up the update.
  * ========================================================================== */
 
-const CACHE_VERSION = "fitlife-v9";
+const CACHE_VERSION = "fitlife-v10";
 
-// Asset URLs carry ?v=6 so they match exactly what index.html requests
+// Asset URLs carry ?v=7 so they match exactly what index.html requests
 // (and so old cached copies from the previous build are bypassed).
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./styles.css?v=6",
-  "./data.js?v=6",
-  "./db.js?v=6",
-  "./store.js?v=6",
-  "./ui.js?v=6",
-  "./auth.js?v=6",
-  "./trainee.js?v=6",
-  "./trainer.js?v=6",
-  "./app.js?v=6",
+  "./styles.css?v=7",
+  "./data.js?v=7",
+  "./db.js?v=7",
+  "./store.js?v=7",
+  "./ui.js?v=7",
+  "./auth.js?v=7",
+  "./trainee.js?v=7",
+  "./trainer.js?v=7",
+  "./app.js?v=7",
   "./hero.jpg",
   "./coach.jpg",
-  "./avatar0.jpg?v=6",
-  "./avatar1.jpg?v=6",
-  "./avatar2.jpg?v=6",
-  "./avatar3.jpg?v=6",
-  "./avatar4.jpg?v=6",
-  "./avatar5.jpg?v=6",
-  "./avatar6.jpg?v=6",
-  "./avatar7.jpg?v=6",
-  "./avatar8.jpg?v=6",
-  "./avatar9.jpg?v=6",
+  "./avatar0.jpg?v=7",
+  "./avatar1.jpg?v=7",
+  "./avatar2.jpg?v=7",
+  "./avatar3.jpg?v=7",
+  "./avatar4.jpg?v=7",
+  "./avatar5.jpg?v=7",
+  "./avatar6.jpg?v=7",
+  "./avatar7.jpg?v=7",
+  "./avatar8.jpg?v=7",
+  "./avatar9.jpg?v=7",
   "./icon-192.png",
   "./icon-512.png",
 ];
