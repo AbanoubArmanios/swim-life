@@ -6,23 +6,25 @@
  * to pick up the update.
  * ========================================================================== */
 
-const CACHE_VERSION = "fitlife-v5";
+const CACHE_VERSION = "fitlife-v6";
 
-// Asset URLs carry ?v=3 so they match exactly what index.html requests
+// Asset URLs carry ?v=4 so they match exactly what index.html requests
 // (and so old cached copies from the previous build are bypassed).
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./styles.css?v=3",
-  "./data.js?v=3",
-  "./db.js?v=3",
-  "./store.js?v=3",
-  "./ui.js?v=3",
-  "./auth.js?v=3",
-  "./trainee.js?v=3",
-  "./trainer.js?v=3",
-  "./app.js?v=3",
+  "./styles.css?v=4",
+  "./data.js?v=4",
+  "./db.js?v=4",
+  "./store.js?v=4",
+  "./ui.js?v=4",
+  "./auth.js?v=4",
+  "./trainee.js?v=4",
+  "./trainer.js?v=4",
+  "./app.js?v=4",
+  "./hero.jpg",
+  "./coach.jpg",
   "./icon-192.png",
   "./icon-512.png",
 ];

@@ -57,18 +57,28 @@ const App = (() => {
 
     /* Header / brand */
     root.append(
-      el("header.brand", {}, [
-        el("div.brand-left", {}, [
-          el("div.logo", {}, [el("span", { text: "🏋" })]),
-          el("div", {}, [
-            el("div.brand-name", { text: "FITNESS LIFE" }),
-            el("div.brand-tag", { text: "BY COACH JOHN KAMEL" }),
+      el("header.home-hero", {}, [
+        el("div.hero-shade", {}, [
+          el("div.hero-top", {}, [
+            el("div.brand-left", {}, [
+              el("div.logo", {}, [el("span", { text: "🏋" })]),
+              el("div", {}, [
+                el("div.brand-name", { text: "FITNESS LIFE" }),
+                el("div.brand-tag", { text: "BY COACH JOHN KAMEL" }),
+              ]),
+            ]),
+            el("button.btn.trainer-btn.coach-btn", {
+              onClick: () => Auth.loginTrainer(() => openTrainer()),
+            }, [
+              el("img.coach-mini", { src: "./coach.jpg", alt: "Coach John", loading: "lazy" }),
+              el("span", { text: "Coach Login" }),
+            ]),
+          ]),
+          el("div.hero-copy", {}, [
+            el("div.hero-kicker", { text: "REAL COACHING · REAL RESULTS" }),
+            el("h1.hero-head", { text: "TRAIN WITH COACH JOHN" }),
           ]),
         ]),
-        el("button.btn.trainer-btn", {
-          html: "🔒 Trainer Login",
-          onClick: () => Auth.loginTrainer(() => openTrainer()),
-        }),
       ])
     );
 
