@@ -303,9 +303,14 @@ const UI = (() => {
       .replace(/"/g, "&quot;");
   }
 
-  /** Resolve the display photo for a player (uploaded or generated avatar). */
+  /** Resolve the display photo: uploaded photo → real default avatar → drawn fallback. */
   function photoOf(p) {
-    return p.photo || generateAvatar(p.name, p.avatarSeed || 0);
+    if (p.photo) return p.photo;
+    const seed = p.avatarSeed || 0;
+    if (typeof DEFAULT_AVATARS !== "undefined" && DEFAULT_AVATARS.length) {
+      return DEFAULT_AVATARS[seed % DEFAULT_AVATARS.length];
+    }
+    return generateAvatar(p.name, seed);
   }
 
   /** Convert a YouTube URL to an embeddable form. */

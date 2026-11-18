@@ -17,7 +17,14 @@
 /** The single coach PIN (4 digits). */
 const TRAINER_PIN = "7001";
 
-/* ---------------------- Gym character avatar palettes --------------------- */
+/* Real photo avatars (realistic gym portraits), one per member by seed.
+   A member's uploaded photo still overrides these (see photoOf in ui.js). */
+const DEFAULT_AVATARS = [
+  "./avatar0.jpg", "./avatar1.jpg", "./avatar2.jpg", "./avatar3.jpg", "./avatar4.jpg",
+  "./avatar5.jpg", "./avatar6.jpg", "./avatar7.jpg", "./avatar8.jpg", "./avatar9.jpg",
+];
+
+/* ---------------------- Gym character avatar palettes (fallback) ---------- */
 const SKIN_TONES = ["#f6cfa5", "#efbd8c", "#e0a878", "#d29b6e", "#b97c4f", "#9c6238", "#7d4b28"];
 const HAIR_COLORS = ["#2b2118", "#4a3527", "#1c1c1c", "#5c3b1e", "#31261d", "#0f0f0f"];
 const KIT_COLORS = ["#ff5c35", "#ffb020", "#6366f1", "#10b981", "#ef4444", "#0ea5e9", "#f43f5e", "#84cc16", "#8b5cf6", "#f97316"];
